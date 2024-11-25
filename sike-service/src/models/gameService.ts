@@ -1,5 +1,6 @@
 import { GameModel } from "../models/game";
 import { Server } from "socket.io";
+import { ResponseDocSchema } from "../utils/interfaces";
 
 export class GameService {
   private io: Server;
@@ -67,8 +68,9 @@ export class GameService {
 
     // Check if all players answered
     if (
-      game.responses.filter((r) => r.round === game.currentRound).length ===
-      game.players.length
+      game.responses.filter(
+        (r: ResponseDocSchema) => r.round === game.currentRound
+      ).length === game.players.length
     ) {
       game.currentRound += 1;
 
