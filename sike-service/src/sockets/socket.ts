@@ -134,7 +134,8 @@ export async function voteResponses(
     if (updatedVotes) {
       updatedGame = await GameModel.findOneAndUpdate(
         { roomId },
-        { responses: updatedVotes }
+        { $set: { responses: [updatedVotes._id] } },
+        { new: true }
       );
     }
   }
