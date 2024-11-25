@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { socket } from "../utils/socket";
-import { Socket } from "socket.io-client";
 
 export const useSocket = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {

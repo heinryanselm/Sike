@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { socket } from "../../utils/socket";
@@ -75,6 +76,7 @@ export default function GameRoom() {
       socket.off("start");
       socket.off("attempt");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId]);
 
   const handleVote = (responseUsername: string) => {

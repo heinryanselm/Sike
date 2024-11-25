@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useSocket } from "../../hooks/useSocket";
 import { PlayerList } from "./PlayerList";
 import { Button } from "../ui/Button";

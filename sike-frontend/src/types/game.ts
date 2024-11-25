@@ -13,6 +13,7 @@ export interface GameState {
   roomId: string;
   creator: string;
   questions: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   responses: any[];
 }
 
