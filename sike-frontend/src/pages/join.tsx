@@ -11,7 +11,7 @@ export default function JoinGame() {
   const handleJoin = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/room/join/${roomId}`,
+        `https://sike-8odb.vercel.app/room/join/${roomId}`,
         {
           method: "POST",
           headers: {
