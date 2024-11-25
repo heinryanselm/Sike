@@ -93,7 +93,8 @@ export async function onAttempt(
   if (game) {
     updatedGame = await GameModel.findOneAndUpdate(
       { roomId },
-      { $set: { responses: responseOfPlayer } }
+      { $set: { responses: [responseOfPlayer._id] } },
+      { new: true }
     );
   }
 

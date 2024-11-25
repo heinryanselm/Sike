@@ -61,8 +61,10 @@ export class GameService {
     if (!game) return;
 
     const newResponse: ResponseDocSchema = {
+      response: answer,
       username,
-      answer,
+      question: game.questions[game.currentRound],
+      votes: [],
       round: game.currentRound,
     };
 

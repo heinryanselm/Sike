@@ -21,7 +21,7 @@ export interface ResponseDocSchema extends mongoose.Document {
   question: string;
   answer: string;
   round: number;
-  votes: VoteDocSchema[];
+  votes: string[];
 }
 
 export interface GameDocSchema extends mongoose.Document {
