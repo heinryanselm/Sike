@@ -60,11 +60,13 @@ export class GameService {
     const game = await GameModel.findOne({ roomId });
     if (!game) return;
 
-    game.responses.push({
+    const newResponse: ResponseDocSchema = {
       username,
       answer,
       round: game.currentRound,
-    });
+    };
+
+    game.responses.push(newResponse);
 
     // Check if all players answered
     if (

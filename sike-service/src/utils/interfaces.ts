@@ -19,6 +19,8 @@ export interface ResponseDocSchema extends mongoose.Document {
   response: string;
   username: string;
   question: string;
+  answer: string;
+  round: number;
   votes: VoteDocSchema[];
 }
 

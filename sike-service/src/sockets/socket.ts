@@ -1,16 +1,16 @@
 /* eslint-disable consistent-return */
-import socketio from 'socket.io';
-import { GameModel } from '../models/game';
-import { ResponseModel } from '../models/response';
-import { PlayerDocSchema } from '../utils/interfaces';
-import questionAssigner from '../utils/questionAssigner';
-import logger from '../utils/logger';
+import socketio from "socket.io";
+import { GameModel } from "../models/game";
+import { ResponseModel } from "../models/response";
+import { PlayerDocSchema } from "../utils/interfaces";
+import questionAssigner from "../utils/questionAssigner";
+import logger from "../utils/logger";
 
 // On join keep adding new players
 export function onJoin(
   data: { roomId: string; players: PlayerDocSchema[] },
   io: socketio.Server,
-  namespace: string,
+  namespace: string
 ) {
   const { roomId, players } = data;
   logger.info(data);
@@ -18,7 +18,7 @@ export function onJoin(
   if (!roomId || !players || !players.length) {
     return;
   }
-  io.of(namespace).to(roomId).emit('join', {
+  io.of(namespace).to(roomId).emit("join", {
     players,
   });
 }
@@ -27,7 +27,7 @@ export function onJoin(
 export async function onStart(
   data: { roomId: string },
   io: socketio.Server,
-  namespace: string,
+  namespace: string
 ) {
   const { roomId } = data;
 
@@ -37,7 +37,7 @@ export async function onStart(
       $set: {
         hasStarted: true,
       },
-    },
+    }
   );
   if (game) {
     const questions = questionAssigner(game.players);
@@ -48,7 +48,7 @@ export async function onStart(
           currentRound: 1,
           questions,
         },
-      },
+      }
     );
   }
 
@@ -59,7 +59,7 @@ export async function onStart(
     return;
   }
 
-  io.of(namespace).to(roomId).emit('start', {
+  io.of(namespace).to(roomId).emit("start", {
     roomId,
     hasStarted: true,
   });
@@ -74,11 +74,9 @@ export async function onAttempt(
     question: string;
   },
   io: socketio.Server,
-  namespace: string,
+  namespace: string
 ) {
-  const {
-    roomId, username, response, question,
-  } = data;
+  const { roomId, username, response, question } = data;
 
   if (!response || !username || !roomId) return false;
 
@@ -95,11 +93,11 @@ export async function onAttempt(
   if (game) {
     updatedGame = await GameModel.findOneAndUpdate(
       { roomId },
-      { $push: { responses: responseOfPlayer } },
+      { $set: { responses: responseOfPlayer } }
     );
   }
 
-  io.of(namespace).to(roomId).emit('attempt', {
+  io.of(namespace).to(roomId).emit("attempt", {
     updatedGame,
   });
 }
@@ -113,11 +111,9 @@ export async function voteResponses(
     question: string;
   },
   io: socketio.Server,
-  namespace: string,
+  namespace: string
 ) {
-  const {
-    roomId, username, response, question,
-  } = data;
+  const { roomId, username, response, question } = data;
 
   if (!response || !username || !roomId || !question) return false;
 
@@ -131,25 +127,27 @@ export async function voteResponses(
     updatedVotes = await ResponseModel.findOneAndUpdate(
       { question, response },
       { $addToSet: { votes: username } },
-      { new: true },
+      { new: true }
     );
 
     if (updatedVotes) {
       updatedGame = await GameModel.findOneAndUpdate(
         { roomId },
-        { responses: updatedVotes },
+        { responses: updatedVotes }
       );
     }
   }
-  io.of(namespace).to(roomId).emit('voting', {
+  io.of(namespace).to(roomId).emit("voting", {
     updatedGame,
   });
 }
 
 // Finish round next question
-export async function onNext(data: { roomId: string },
+export async function onNext(
+  data: { roomId: string },
   io: socketio.Server,
-  namespace: string) {
+  namespace: string
+) {
   const { roomId } = data;
 
   const game = await GameModel.findOne({ roomId });
@@ -161,10 +159,10 @@ export async function onNext(data: { roomId: string },
     if (game) {
       updatedGame = await GameModel.findOneAndUpdate(
         { roomId },
-        { $set: { currentRound: updatedCurrentRound } },
+        { $set: { currentRound: updatedCurrentRound } }
       );
     }
-    io.of(namespace).to(roomId).emit('next', {
+    io.of(namespace).to(roomId).emit("next", {
       updatedGame,
     });
   }
@@ -174,7 +172,7 @@ export async function onNext(data: { roomId: string },
 export async function onDisconnect(
   data: { roomId: string; username: string },
   io: socketio.Server,
-  namespace: string,
+  namespace: string
 ) {
   const { roomId, username } = data;
 
@@ -182,10 +180,10 @@ export async function onDisconnect(
 
   const game = await GameModel.findOneAndUpdate(
     { roomId },
-    { $pull: { players: { username } } },
+    { $pull: { players: { username } } }
   );
   if (game) {
-    io.of(namespace).to(roomId).emit('disconnectPlayer', {
+    io.of(namespace).to(roomId).emit("disconnectPlayer", {
       username,
     });
   }
@@ -195,7 +193,7 @@ export async function onDisconnect(
 export async function onEnd(
   data: { roomId: string },
   io: socketio.Server,
-  namespace: string,
+  namespace: string
 ) {
   const { roomId } = data;
 
@@ -203,7 +201,7 @@ export async function onEnd(
 
   const game = await GameModel.deleteOne({ roomId });
   if (game) {
-    io.of(namespace).to(roomId).emit('end', {
+    io.of(namespace).to(roomId).emit("end", {
       roomId,
     });
   }
