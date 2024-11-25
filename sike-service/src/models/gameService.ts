@@ -60,13 +60,14 @@ export class GameService {
     const game = await GameModel.findOne({ roomId });
     if (!game) return;
 
-    const newResponse: ResponseDocSchema = {
+    const newResponse = new ResponseModel({
       response: answer,
       username,
       question: game.questions[game.currentRound],
+      answer: answer,
       votes: [],
       round: game.currentRound,
-    };
+    });
 
     game.responses.push(newResponse);
 
