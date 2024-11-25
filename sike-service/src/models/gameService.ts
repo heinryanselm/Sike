@@ -60,6 +60,7 @@ export class GameService {
     const game = await GameModel.findOne({ roomId });
     if (!game) return;
 
+    //@ts-ignore
     const newResponse = new ResponseModel({
       response: answer,
       username,
