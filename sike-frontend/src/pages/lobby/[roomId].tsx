@@ -13,7 +13,12 @@ export default function Lobby() {
   const router = useRouter();
   const { roomId } = router.query;
   const [players, setPlayers] = useState<Player[]>([]);
-  const isCreator = localStorage.getItem("isCreator") === "true";
+  const [isCreator, setIsCreator] = useState(false);
+
+  useEffect(() => {
+    // Move localStorage check inside useEffect to ensure client-side execution
+    setIsCreator(localStorage.getItem("isCreator") === "true");
+  }, []);
 
   useEffect(() => {
     if (!roomId) return;
