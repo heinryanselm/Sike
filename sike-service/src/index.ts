@@ -24,6 +24,13 @@ app.use(
 );
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.json({
+    status: "success",
+    message: "Sike Backend API is running!",
+  });
+});
+
 app.use("/", routes);
 
 const io = new Server(server, { cors: { origin: "*" } });
