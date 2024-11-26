@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { Layout } from "../components/layout/Layout";
 import { Button } from "../components/ui/Button";
+import { createGame } from "@/services/api";
 
 export default function CreateGame() {
   const router = useRouter();
@@ -10,13 +11,16 @@ export default function CreateGame() {
 
   const handleCreate = async () => {
     try {
-      const response = await fetch("https://sike-8odb.vercel.app/room/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, rounds }),
-      });
+      // const response = await fetch(
+      //   "https://sike-backend.onrender.com/room/create",
+      //   {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({ username, rounds }),
+      //   }
+      // );
 
-      const data = await response.json();
+      const data = await createGame({ username, rounds });
       if (data.success) {
         localStorage.setItem("username", username);
         localStorage.setItem("isCreator", "true");

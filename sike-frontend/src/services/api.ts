@@ -1,13 +1,15 @@
 import axios from "axios";
 import { CreateGamePayload, JoinGamePayload } from "../types/game";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://sike-backend.onrender.com";
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 export const createGame = async (payload: CreateGamePayload) => {

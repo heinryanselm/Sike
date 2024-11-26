@@ -9,19 +9,19 @@ import routes from "./routes/mainRouter";
 import socketHandler from "./sockets/handler";
 
 dotenv.config();
-
 connectDB(process.env.DB_URL || "");
 
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors());
+const corsOptions = {
+  origin: "*",
+  methods: ["GET", "POST"],
+  credentials: true,
+};
 
-app.use(
-  express.urlencoded({
-    extended: false,
-  })
-);
+app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
 
 app.use("/", routes);
 
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { cors: corsOptions });
 socketHandler(io);
 
 server.listen(process.env.PORT || 8000, (): void => {
