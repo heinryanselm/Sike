@@ -109,7 +109,7 @@ export default function GameRoom() {
         {phase === "waiting" && (
           <div className="text-center">
             <h3 className="text-xl mb-4">Players in game:</h3>
-            {players.map((player, index) => (
+            {players.map((player: { username: string }, index) => (
               <div key={index} className="mb-2">
                 {player.username}
               </div>
